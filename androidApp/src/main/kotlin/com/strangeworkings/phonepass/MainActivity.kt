@@ -4,6 +4,7 @@ import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -30,20 +31,11 @@ class MainActivity : ComponentActivity() {
                 Manifest.permission.BLUETOOTH_ADVERTISE,
                 Manifest.permission.BLUETOOTH_ADMIN,
                 Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.POST_NOTIFICATIONS,
                 //Manifest.permission.BLUETOOTH_PRIVILEGED,
             ),
             READ_EXTERNAL_STORAGE_PERMISSION_CODE
         )
-        val bluetoothManager: BluetoothManager = getSystemService(BluetoothManager::class.java)
-        val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.adapter
-        if (bluetoothAdapter?.isEnabled == false) {
-            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            val REQUEST_ENABLE_BT = 0
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
-        }
-        val scanner = BluetoothScanner(bluetoothAdapter, this, Profiles("test","they/them","The quick brown fox"))
-        scanner.advertise()
-        scanner.scan()
 
 
         //val tester = Profiles("jane doe", "she/her", bio = "yes")
@@ -55,8 +47,29 @@ class MainActivity : ComponentActivity() {
         permissions: Array<String>,
         grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Toast.makeText(this, permissions.contentToString(), Toast.LENGTH_LONG).show()
-        Toast.makeText(this, grantResults.contentToString(), Toast.LENGTH_LONG).show()
+        if (checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.BLUETOOTH_ADVERTISE) == PackageManager.PERMISSION_GRANTED) {
+            val bluetoothManager: BluetoothManager = getSystemService(BluetoothManager::class.java)
+            val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.adapter
+            if (bluetoothAdapter?.isEnabled == false) {
+                val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+                val REQUEST_ENABLE_BT = 0
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
+            }
+            val CHANNEL = "com.strangeworkings.phonepass/foreground"
+            val intent = Intent(this, BackgroundScanner::class.java)
+            startForegroundService(intent)
+        }
+//            val bluetoothManager: BluetoothManager = getSystemService(BluetoothManager::class.java)
+//            val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.adapter
+//            if (bluetoothAdapter?.isEnabled == false) {
+//                val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+//                val REQUEST_ENABLE_BT = 0
+//                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
+//            }
+//            val scanner = BluetoothScanner(bluetoothAdapter, this, Profiles("test","they/them","The quick brown fox"))
+//            scanner.advertise()
+//            scanner.scan()
+//        }
 
     }
 }
