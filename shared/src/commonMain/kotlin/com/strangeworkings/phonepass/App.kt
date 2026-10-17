@@ -22,6 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -41,6 +44,7 @@ object Routes{
 }
 
 @Composable
+@Preview
 fun AppNavigation() {
     val navController = rememberNavController()
 
@@ -76,13 +80,22 @@ fun Home(navController: NavController) {
             var userState = rememberTextFieldState(initialText = "")
             var pronounsState = rememberTextFieldState(initialText = "")
             var bioState = rememberTextFieldState(initialText = "")
+
+            Spacer(
+                modifier = Modifier.height(50.dp)
+            )
+            Text(text = "Welcome to phonepass! \n Please fill out your information below. This will be shared with others :)", fontSize = 20.sp, textAlign = TextAlign.Center  )
+            Spacer(
+                modifier = Modifier.height(40.dp)
+            )
+
             TextField(
                 state = userState,
                 label = {Text("profile")}
             )
 
             Spacer(
-                modifier = Modifier.height(16.dp)
+                modifier = Modifier.height(30.dp)
             )
 
             TextField(
@@ -91,7 +104,7 @@ fun Home(navController: NavController) {
             )
 
             Spacer(
-                modifier = Modifier.height(16.dp)
+                modifier = Modifier.height(30.dp)
             )
 
             TextField(
@@ -118,22 +131,7 @@ fun Home(navController: NavController) {
             }){
                 Text("submit")
             }
-            /*
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
-            }
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Test: $greeting")
-                }
-            }
-
-             */
+            Spacer(Modifier.height(50.dp))
         }
     }
 }
