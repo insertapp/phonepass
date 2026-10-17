@@ -5,10 +5,13 @@ class Profiles {
     var pronouns: String
     var bio: String
 
+    var collectedProfiles: List<Pair<Profiles, Int>>
+
     constructor(name: String, pronouns: String, bio: String) {
         this.name = name
         this.pronouns = pronouns
         this.bio = bio
+        collectedProfiles = emptyList()
     }
 
     override fun toString(): String {
