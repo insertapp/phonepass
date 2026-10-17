@@ -38,9 +38,9 @@ fun App() {
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            var savedUser = ""
-            var savedPronouns = ""
-            var savedBio = ""
+            var savedUser by remember { mutableStateOf("") }
+            var savedPronouns by remember { mutableStateOf("") }
+            var savedBio by remember { mutableStateOf("") }
             var userState = rememberTextFieldState(initialText = "")
             var pronounsState = rememberTextFieldState(initialText = "")
             var bioState = rememberTextFieldState(initialText = "")
