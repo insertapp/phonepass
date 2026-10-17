@@ -41,6 +41,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             App()
         }
+
+        val tester = Profiles("jane doe", "she/her", bio = "yes")
+        Toast.makeText(this, tester.toString(), Toast.LENGTH_LONG).show()
     }
 
     override fun onRequestPermissionsResult(
