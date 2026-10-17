@@ -14,6 +14,7 @@ dependencies {
     implementation(project(":shared"))
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.room3.common)
 
     implementation(libs.compose.uiToolingPreview)
     debugImplementation(libs.compose.uiTooling)
