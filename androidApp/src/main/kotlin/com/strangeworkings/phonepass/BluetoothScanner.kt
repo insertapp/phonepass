@@ -29,6 +29,7 @@ import java.nio.charset.Charset
 import kotlin.with
 import androidx.core.util.size
 import java.nio.file.Files.writeString
+import java.util.Dictionary
 
 
 class BluetoothScanner {
@@ -131,6 +132,17 @@ class BluetoothScanner {
             status: Int
         ) {
             super.onCharacteristicWrite(gatt, characteristic, status)
+            if (offset >= queue.size) {
+                characteristic?.let {
+                    gatt?.writeCharacteristic(
+                        it,
+                        "\uEC2E".toByteArray(),
+                        BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+                    )
+                }
+                gatt?.close()
+                return
+            }
             characteristic?.let {
                 gatt?.writeCharacteristic(
                     it,
@@ -139,10 +151,6 @@ class BluetoothScanner {
                 )
             }
             offset += 1
-            if (offset >= queue.size) {
-                gatt?.close()
-                return
-            }
 
         }
     }
@@ -191,7 +199,7 @@ class BluetoothScanner {
         gattServer.addService(servicegatt)
 
     }
-
+    private val inProgress: HashMap<String, String> = hashMapOf("" to "")
     private val serverCallback = object : BluetoothGattServerCallback() {
         override fun onCharacteristicWriteRequest(
             device: BluetoothDevice?,
@@ -212,6 +220,12 @@ class BluetoothScanner {
                 value
             )
             val text = value?.let { String(it, Charsets.UTF_8) }
+            if (text == "\uEC2E") {
+                Log.e("HATT","WE DONE")
+                inProgress[device?.address!!]?.let { Log.e("HATT",it) }
+            } else {
+                inProgress[device?.address!!] = inProgress.getOrDefault(device?.address!!, "")+text
+            }
             text?.let { Log.e("HATT",it) }
             device?.let {
                 gattServer.sendResponse(
@@ -222,6 +236,7 @@ class BluetoothScanner {
                     null
                 )
             }
+
 
         }
     }
