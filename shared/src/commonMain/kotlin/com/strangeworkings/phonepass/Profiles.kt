@@ -1,5 +1,8 @@
 package com.strangeworkings.phonepass
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 class Profiles {
     var name: String
     var pronouns: String
