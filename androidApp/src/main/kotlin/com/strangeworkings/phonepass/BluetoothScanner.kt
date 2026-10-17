@@ -77,7 +77,7 @@ class BluetoothScanner {
                 if (foundDeviecs.contains(address)) {
                     return
                 }
-                foundDeviecs.add(address)
+
                 Log.i(
                     "ScanCallback",
                     "Found BLE device! Name: ${name ?: "Unnamed"}, address: $address, uuid: ${uuids.contentToString()}"
@@ -235,11 +235,22 @@ class BluetoothScanner {
             val text = value?.let { String(it, Charsets.UTF_8) }
             if (text == "\uEC2E") {
                 Log.e("HATT","WE DONE")
+                foundDeviecs.add(device?.address!!)
+                Log.i("TEST",foundDeviecs.toString())
                 inProgress[device?.address!!]?.let { Log.e("HATT",it) }
-                val newuser: Profiles = inProgress[device?.address!!]?.let { Json.decodeFromString( it ) }!!
-                if (!foundusers.containsValue(newuser)) {
-                    foundusers.put(LocalDateTime.now(), newuser)
+                try {
+                    val newuser: Profiles =
+                        inProgress[device?.address!!]?.let { Json.decodeFromString(it) }!!
+                    if (!foundusers.containsValue(newuser)) {
+                        foundusers.put(LocalDateTime.now(), newuser)
+                        error(newuser.toString())
+                    }
+                } finally {
+                    Log.i("H", "we did it")
+                    inProgress[device?.address!!] = ""
+
                 }
+
             } else {
                 inProgress[device?.address!!] = inProgress.getOrDefault(device?.address!!, "")+text
             }

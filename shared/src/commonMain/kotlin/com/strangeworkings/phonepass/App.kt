@@ -41,8 +41,6 @@ import phonepass.shared.generated.resources.Res
 import phonepass.shared.generated.resources.compose_multiplatform
 
 
-
-
 object Routes{
     const val Home = "Home"
     const val Passing = "Passing"

@@ -1,0 +1,10 @@
+CREATE TABLE Me (
+  full_name TEXT NOT NULL,
+  pronouns TEXT NOT NULL,
+  bio TEXT
+);
+
+INSERT INTO Me (full_name, pronouns, bio) VALUES ('', '', '');
+
+UpdateProfile:
+UPDATE Me SET full_name = ?, pronouns = ?, bio = ?;

@@ -1,6 +1,11 @@
 CREATE TABLE Profiles (
   full_name TEXT NOT NULL,
   pronouns TEXT NOT NULL,
-  bio TEXT Not NUll,
-  times_seen INT DEFAULT(0)
+  bio TEXT,
+  times_seen INTEGER,
+  timestamp TEXT
 );
+
+InsertProfile:
+INSERT INTO Profiles(full_name, pronouns,bio,times_seen, timestamp)
+VALUES (?,?,?,?,?);
