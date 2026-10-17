@@ -5,6 +5,12 @@ plugins {
     alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    kotlin("plugin.serialization") version "2.4.21"
+}
+repositories {
+    mavenCentral()
+    google()
+    gradlePluginPortal()
 }
 
 kotlin {
@@ -43,6 +49,9 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.compose.uiTooling)
+            implementation( "androidx.navigation:navigation-ui-ktx:2.10.2")
+            implementation("org.jetbrains.androidx.navigation:navigation-compose:2.10.0-rc01")
+            implementation ("androidx.navigation:navigation-fragment-ktx:2.10.2")
         }
         commonMain.dependencies {
             implementation("com.squareup.okio:okio:3.18.2")
@@ -53,10 +62,10 @@ kotlin {
             implementation(libs.compose.components.resources)
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
             implementation(libs.androidx.lifecycle.runtimeCompose)
-            implementation ("androidx.navigation:navigation-fragment-ktx:2.10.2")
-            implementation( "androidx.navigation:navigation-ui-ktx:2.10.2")
-            implementation("org.jetbrains.androidx.navigation:navigation-compose:2.10.0-rc01")
+
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
