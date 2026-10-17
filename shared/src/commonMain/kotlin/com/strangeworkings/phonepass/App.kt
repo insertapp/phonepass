@@ -60,7 +60,7 @@ fun AppNavigation(onAndroidAction: () -> Unit, sumbitProfile: () -> Unit, profdb
 
         // Second Page: Detail Screen
         composable(Routes.Passing) {
-            Passing()
+            Passing(profdb)
         }
     }
 }
@@ -144,7 +144,7 @@ fun Home(navController: NavController, onAndroidAction: ()-> Unit, sumbitProfile
 }
 
 @Composable
-fun Passing(){
+fun Passing(profdb: ProfileDB){
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
 
@@ -155,8 +155,15 @@ fun Passing(){
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Spacer(modifier = Modifier.height(100.dp))
-            Text("")
+            Spacer(modifier = Modifier.height(50.dp))
+
+            Text("Here are all your passes!", fontSize = 20.sp)
+
+            var passes = profdb.profleQueries.GetProfiles().executeAsList()
+
+            Text("$passes")
+
+
         }
     }
 }
