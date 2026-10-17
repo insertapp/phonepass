@@ -5,12 +5,22 @@ plugins {
     alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    kotlin("plugin.serialization") version "2.4.21"
+   // kotlin("plugin.serialization") version "2.4.21"
+    alias(libs.plugins.kotlinxSerialization)
+    id("app.cash.sqldelight") version "2.0.2"
 }
 repositories {
     mavenCentral()
     google()
     gradlePluginPortal()
+}
+
+sqldelight {
+    databases {
+        create("ProfileDB") {
+            packageName.set("com.strangeworkings.phonepass")
+        }
+    }
 }
 
 kotlin {
@@ -53,6 +63,7 @@ kotlin {
             implementation("org.jetbrains.androidx.navigation:navigation-compose:2.10.0-rc01")
             implementation ("androidx.navigation:navigation-fragment-ktx:2.10.2")
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
+            implementation("app.cash.sqldelight:android-driver:2.0.2")
         }
         commonMain.dependencies {
             implementation("com.squareup.okio:okio:3.18.2")

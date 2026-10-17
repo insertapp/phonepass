@@ -1,0 +1,6 @@
+CREATE TABLE Profiles (
+  full_name TEXT NOT NULL,
+  pronouns TEXT NOT NULL,
+  bio TEXT Not NUll,
+  times_seen INT DEFAULT(0)
+);
