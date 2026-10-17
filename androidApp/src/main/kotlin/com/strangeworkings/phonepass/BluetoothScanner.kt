@@ -31,6 +31,7 @@ import java.nio.charset.Charset
 import kotlin.with
 import androidx.core.util.size
 import java.nio.file.Files.writeString
+import java.time.LocalDateTime
 import java.util.Dictionary
 
 
@@ -39,7 +40,9 @@ class BluetoothScanner {
     var bladapter: BluetoothAdapter?
     val pUuid: ParcelUuid = ParcelUuid( UUID.fromString( "CDB7950D-73F1-4D4D-8E47-C090401DBD63" ) )
     var isScanning: Boolean = false
-    private val foundDeviecs: MutableList<String> = mutableListOf("")
+
+    private val foundusers: HashMap<LocalDateTime, Profiles> = hashMapOf()
+    private val foundDeviecs: MutableList<String> = mutableListOf()
     private val scanSettings = ScanSettings.Builder()
         .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
         .build()
@@ -50,6 +53,11 @@ class BluetoothScanner {
         .setConnectable(true)
         .build();
 
+    fun GetNewUsers(): HashMap<LocalDateTime, Profiles> {
+        val tmp = foundusers.clone()
+        foundusers.clear()
+        return tmp as HashMap<LocalDateTime, Profiles>
+    }
 
     private val advertiseCallback = object: AdvertiseCallback() {
         override fun onStartSuccess(settingsInEffect: AdvertiseSettings?) {
@@ -204,7 +212,7 @@ class BluetoothScanner {
         gattServer.addService(servicegatt)
 
     }
-    private val inProgress: HashMap<String, String> = hashMapOf("" to "")
+    private val inProgress: HashMap<String, String> = hashMapOf()
     private val serverCallback = object : BluetoothGattServerCallback() {
         override fun onCharacteristicWriteRequest(
             device: BluetoothDevice?,
@@ -228,6 +236,10 @@ class BluetoothScanner {
             if (text == "\uEC2E") {
                 Log.e("HATT","WE DONE")
                 inProgress[device?.address!!]?.let { Log.e("HATT",it) }
+                val newuser: Profiles = inProgress[device?.address!!]?.let { Json.decodeFromString( it ) }!!
+                if (!foundusers.containsValue(newuser)) {
+                    foundusers.put(LocalDateTime.now(), newuser)
+                }
             } else {
                 inProgress[device?.address!!] = inProgress.getOrDefault(device?.address!!, "")+text
             }
