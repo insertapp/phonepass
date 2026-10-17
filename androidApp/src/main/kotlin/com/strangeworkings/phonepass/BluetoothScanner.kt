@@ -26,6 +26,8 @@ import java.util.UUID
 import android.util.Log
 import android.util.SparseArray
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.util.isNotEmpty
 import java.nio.charset.Charset
 import kotlin.with
@@ -78,7 +80,7 @@ class BluetoothScanner {
                 if (foundDeviecs.contains(address)) {
                     return
                 }
-
+                foundDeviecs.add(address)
                 Log.i(
                     "ScanCallback",
                     "Found BLE device! Name: ${name ?: "Unnamed"}, address: $address, uuid: ${uuids.contentToString()}"
@@ -238,7 +240,7 @@ class BluetoothScanner {
             val text = value?.let { String(it, Charsets.UTF_8) }
             if (text == "\uEC2E") {
                 Log.e("HATT","WE DONE")
-                foundDeviecs.add(device?.address!!)
+                //foundDeviecs.add(device?.address!!)
                 Log.i("TEST",foundDeviecs.toString())
                 inProgress[device?.address!!]?.let { Log.e("HATT",it) }
                 try {
@@ -246,6 +248,14 @@ class BluetoothScanner {
                         inProgress[device?.address!!]?.let { Json.decodeFromString(it) }!!
                     if (!foundusers.contains(newuser)) {
                         foundusers.add(newuser)
+                        val builder = NotificationCompat.Builder(appcon, "com.strangewokrings.phonepass.newpass")
+                            .setSmallIcon(R.drawable.pass_icon)
+                            .setContentTitle("New Pass!!")
+                            .setContentText("${newuser.name} has passed with you!")
+                            .setAutoCancel(true)
+                        with(NotificationManagerCompat.from(appcon)) {
+                            notify(5555, builder.build())
+                        }
                     }
                 } finally {
                     Log.i("H", "we did it")

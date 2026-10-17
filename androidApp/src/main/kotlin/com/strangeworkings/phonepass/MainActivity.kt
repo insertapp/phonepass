@@ -1,8 +1,11 @@
 package com.strangeworkings.phonepass
 
 import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -50,12 +53,19 @@ class MainActivity : ComponentActivity() {
         if (checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.BLUETOOTH_ADVERTISE) == PackageManager.PERMISSION_GRANTED) {
             val bluetoothManager: BluetoothManager = getSystemService(BluetoothManager::class.java)
             val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.adapter
+            val notificationChannel = NotificationChannel(
+                "com.strangewokrings.phonepass.newpass",
+                "Notification for a new pass",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(notificationChannel)
             if (bluetoothAdapter?.isEnabled == false) {
                 val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
                 val REQUEST_ENABLE_BT = 0
                 startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
             }
-            val CHANNEL = "com.strangeworkings.phonepass/foreground"
+            //val CHANNEL = "com.strangeworkings.phonepass/foreground"
             val intent = Intent(this, BackgroundScanner::class.java)
             startForegroundService(intent)
         }
