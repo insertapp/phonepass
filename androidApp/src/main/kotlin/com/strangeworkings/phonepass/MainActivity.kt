@@ -19,6 +19,9 @@ class MainActivity : ComponentActivity() {
         val READ_EXTERNAL_STORAGE_PERMISSION_CODE = 101
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        setContent {
+            App()
+        }
         ActivityCompat.requestPermissions(
             this,
             arrayOf(
@@ -38,9 +41,10 @@ class MainActivity : ComponentActivity() {
             val REQUEST_ENABLE_BT = 0
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
         }
-        setContent {
-            App()
-        }
+        val scanner = BluetoothScanner(bluetoothAdapter)
+        scanner.advertise()
+        scanner.scan()
+
 
         val tester = Profiles("jane doe", "she/her", bio = "yes")
         Toast.makeText(this, tester.toString(), Toast.LENGTH_LONG).show()
@@ -52,9 +56,7 @@ class MainActivity : ComponentActivity() {
         grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         Toast.makeText(this, permissions.contentToString(), Toast.LENGTH_LONG).show()
-        print(permissions.contentToString())
         Toast.makeText(this, grantResults.contentToString(), Toast.LENGTH_LONG).show()
-        print(grantResults.contentToString())
 
     }
 }
