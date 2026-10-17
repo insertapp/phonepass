@@ -14,4 +14,16 @@ class Profiles {
     override fun toString(): String {
         return name + " " + pronouns + " " + bio
     }
+
+    fun setthisName(name: String){
+        this.name = name
+    }
+
+    fun setthisPronouns(pronouns: String){
+        this.pronouns = pronouns
+    }
+
+    fun setthisBio(bio: String){
+        this.bio = bio
+    }
 }
