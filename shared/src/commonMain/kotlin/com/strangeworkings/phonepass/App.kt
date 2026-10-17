@@ -77,6 +77,10 @@ fun App() {
                     Text("Test: $greeting")
                 }
             }
+
+            Button(onClick = {
+                var persona = Profiles()
+            })
         }
     }
 }
