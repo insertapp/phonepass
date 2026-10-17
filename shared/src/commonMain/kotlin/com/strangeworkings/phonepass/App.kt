@@ -40,7 +40,7 @@ import org.jetbrains.compose.resources.painterResource
 import phonepass.shared.generated.resources.Res
 import phonepass.shared.generated.resources.compose_multiplatform
 
-
+var openedWithNotif: Boolean = false
 object Routes{
     const val Home = "Home"
     const val Passing = "Passing"
@@ -68,6 +68,9 @@ fun AppNavigation(onAndroidAction: () -> Unit, sumbitProfile: () -> Unit, profdb
 
 @Composable
 fun Home(navController: NavController, onAndroidAction: ()-> Unit, sumbitProfile: ()-> Unit, profdb: ProfileDB) {
+    if (openedWithNotif == true){
+        navController.navigate("Passing")
+    }
         MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
         Column(
