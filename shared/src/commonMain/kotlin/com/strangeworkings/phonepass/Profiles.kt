@@ -1,20 +1,32 @@
 package com.strangeworkings.phonepass
-
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encodeToString
+import kotlin.collections.iterator
+
+
+
+
 
 @Serializable
-class Profiles {
+abstract sealed class Profiles {
     var name: String
     var pronouns: String
     var bio: String
 
-    var collectedProfiles: List<Pair<Profiles, Int>>
+
+
+    //var collectedProfiles: HashMap<Profiles, Int>
 
     constructor(name: String, pronouns: String, bio: String) {
         this.name = name
+
         this.pronouns = pronouns
         this.bio = bio
-        collectedProfiles = emptyList()
+
     }
 
     override fun toString(): String {

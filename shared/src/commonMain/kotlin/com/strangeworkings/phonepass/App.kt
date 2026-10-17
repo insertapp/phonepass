@@ -29,7 +29,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.strangeworkings.phonepass.ProfileDB
 
 import okio.FileSystem
 import okio.Path.Companion.toPath
@@ -119,7 +118,7 @@ fun Home(navController: NavController) {
             Text("User: $savedUser")
             Text("Pronouns: $savedPronouns")
             Text("Bio: $savedBio")
-            var tester = Profiles(savedUser, savedPronouns, savedBio)
+            var tester = UserProfile(savedUser, savedPronouns, savedBio)
             var testing = tester.toString()
             Text("profile: $testing")
             Spacer(Modifier.weight(1f))
