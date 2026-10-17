@@ -38,9 +38,14 @@ fun App() {
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            val textState = rememberTextFieldState(initialText = "")
+            var savedUser = ""
+            var savedPronouns = ""
+            var savedBio = ""
+            var userState = rememberTextFieldState(initialText = "")
+            var pronounsState = rememberTextFieldState(initialText = "")
+            var bioState = rememberTextFieldState(initialText = "")
             TextField(
-                state = textState,
+                state = userState,
                 label = {Text("profile")}
             )
 
@@ -49,7 +54,7 @@ fun App() {
             )
 
             TextField(
-                state = textState,
+                state = pronounsState,
                 label = {Text("pronouns")}
             )
 
@@ -58,12 +63,21 @@ fun App() {
             )
 
             TextField(
-                state = textState,
+                state = bioState,
                 label = {Text("bio")}
             )
-
+            Text("User: $savedUser")
+            Text("Pronouns: $savedPronouns")
+            Text("Bio: $savedBio")
             Spacer(Modifier.weight(1f))
-
+            Button(onClick = {
+                savedUser = userState.text.toString()
+                savedPronouns = pronounsState.text.toString()
+                savedBio = bioState.text.toString()
+            }){
+                Text("submit")
+            }
+            /*
             Button(onClick = { showContent = !showContent }) {
                 Text("Click me!")
             }
@@ -78,9 +92,7 @@ fun App() {
                 }
             }
 
-            Button(onClick = {
-                var persona = Profiles()
-            })
+             */
         }
     }
 }
