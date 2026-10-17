@@ -41,7 +41,7 @@ class BluetoothScanner {
     val pUuid: ParcelUuid = ParcelUuid( UUID.fromString( "CDB7950D-73F1-4D4D-8E47-C090401DBD63" ) )
     var isScanning: Boolean = false
 
-    private val foundusers: HashMap<LocalDateTime, Profiles> = hashMapOf()
+    private val foundusers: MutableList<OtherUserProfile> = mutableListOf()
     private val foundDeviecs: MutableList<String> = mutableListOf()
     private val scanSettings = ScanSettings.Builder()
         .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
@@ -53,10 +53,10 @@ class BluetoothScanner {
         .setConnectable(true)
         .build();
 
-    fun GetNewUsers(): HashMap<LocalDateTime, Profiles> {
-        val tmp = foundusers.clone()
+    fun GetNewUsers(): MutableList<OtherUserProfile> {
+        val tmp = foundusers.toMutableList()
         foundusers.clear()
-        return tmp as HashMap<LocalDateTime, Profiles>
+        return tmp as MutableList<OtherUserProfile>
     }
 
     private val advertiseCallback = object: AdvertiseCallback() {
@@ -71,6 +71,7 @@ class BluetoothScanner {
         }
     }
 
+    private val junkCallback = object: ScanCallback() {}
     private val scanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
             with(result.device) {
@@ -82,6 +83,7 @@ class BluetoothScanner {
                     "ScanCallback",
                     "Found BLE device! Name: ${name ?: "Unnamed"}, address: $address, uuid: ${uuids.contentToString()}"
                 )
+                bladapter?.bluetoothLeScanner?.stopScan(junkCallback)
                 connectGatt(null,false,gattCallback)
             }
 
@@ -96,10 +98,10 @@ class BluetoothScanner {
     private val appcon: Context
     private val profile: String
 
-    constructor(adapter: BluetoothAdapter?, ctx: Context, pf: Profiles) {
+    constructor(adapter: BluetoothAdapter?, ctx: Context, pf: UserProfile) {
         bladapter = adapter
         appcon = ctx
-        profile = Json.encodeToString(pf)
+        profile = Json.encodeToString(OtherUserProfile(pf.name,pf.pronouns,pf.bio,0, LocalDateTime.now()))
     }
 
 
@@ -154,6 +156,7 @@ class BluetoothScanner {
                     )
                 }
                 gatt?.close()
+                scan()
                 return
             }
             characteristic?.let {
@@ -239,11 +242,10 @@ class BluetoothScanner {
                 Log.i("TEST",foundDeviecs.toString())
                 inProgress[device?.address!!]?.let { Log.e("HATT",it) }
                 try {
-                    val newuser: Profiles =
+                    val newuser: OtherUserProfile =
                         inProgress[device?.address!!]?.let { Json.decodeFromString(it) }!!
-                    if (!foundusers.containsValue(newuser)) {
-                        foundusers.put(LocalDateTime.now(), newuser)
-                        error(newuser.toString())
+                    if (!foundusers.contains(newuser)) {
+                        foundusers.add(newuser)
                     }
                 } finally {
                     Log.i("H", "we did it")
