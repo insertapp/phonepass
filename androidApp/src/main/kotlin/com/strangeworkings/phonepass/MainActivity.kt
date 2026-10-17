@@ -46,8 +46,8 @@ class MainActivity : ComponentActivity() {
         scanner.scan()
 
 
-        val tester = Profiles("jane doe", "she/her", bio = "yes")
-        Toast.makeText(this, tester.toString(), Toast.LENGTH_LONG).show()
+        //val tester = Profiles("jane doe", "she/her", bio = "yes")
+        //Toast.makeText(this, tester.toString(), Toast.LENGTH_LONG).show()
     }
 
     override fun onRequestPermissionsResult(
