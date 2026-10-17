@@ -18,6 +18,8 @@ import android.bluetooth.le.ScanFilter
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.content.Context
+import kotlinx.serialization.*
+import kotlinx.serialization.json.*
 import android.os.Parcel
 import android.os.ParcelUuid
 import java.util.UUID
@@ -84,20 +86,23 @@ class BluetoothScanner {
     }
 
     private val appcon: Context
+    private val profile: String
 
-    constructor(adapter: BluetoothAdapter?, ctx: Context) {
+    constructor(adapter: BluetoothAdapter?, ctx: Context, pf: Profiles) {
         bladapter = adapter
         appcon = ctx
+        profile = Json.encodeToString(pf)
     }
 
 
     private val gattCallback = object : BluetoothGattCallback() {
-        private val queue: List<String> = "The Quick Brown Fox Jumps Over THe Lazy Dog Into the lazy river".chunked(12)
+        private var queue: List<String> = "The Quick Brown Fox Jumps Over THe Lazy Dog Into the lazy river".chunked(12)
         private var offset: Int = 1
         override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
             val deviceAddress = gatt.device.address
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 if (newState == BluetoothProfile.STATE_CONNECTED) {
+                    queue = profile.chunked(size = 12)
                     Log.w("BluetoothGattCallback", "Successfully connected to $deviceAddress")
                     gatt.discoverServices()
                 } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {

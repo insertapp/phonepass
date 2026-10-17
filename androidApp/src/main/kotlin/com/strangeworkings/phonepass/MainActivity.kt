@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
             val REQUEST_ENABLE_BT = 0
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
         }
-        val scanner = BluetoothScanner(bluetoothAdapter, this)
+        val scanner = BluetoothScanner(bluetoothAdapter, this, Profiles("test","they/them","The quick brown fox"))
         scanner.advertise()
         scanner.scan()
 

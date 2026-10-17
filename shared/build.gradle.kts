@@ -52,6 +52,7 @@ kotlin {
             implementation( "androidx.navigation:navigation-ui-ktx:2.10.2")
             implementation("org.jetbrains.androidx.navigation:navigation-compose:2.10.0-rc01")
             implementation ("androidx.navigation:navigation-fragment-ktx:2.10.2")
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
         }
         commonMain.dependencies {
             implementation("com.squareup.okio:okio:3.18.2")
