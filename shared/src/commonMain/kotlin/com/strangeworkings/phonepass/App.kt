@@ -160,8 +160,12 @@ fun Passing(profdb: ProfileDB){
             Text("Here are all your passes!", fontSize = 20.sp)
 
             var passes = profdb.profleQueries.GetProfiles().executeAsList()
+            var printpasses = ""
+            for (pass in passes){
+                printpasses += pass.full_name + "-" + pass.pronouns + "-" + pass.bio + "\n"
+            }
 
-            Text("$passes")
+            Text("$printpasses")
 
 
         }
