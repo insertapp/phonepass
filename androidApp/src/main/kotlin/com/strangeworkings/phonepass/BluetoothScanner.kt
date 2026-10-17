@@ -272,12 +272,13 @@ class BluetoothScanner {
                             profiledatabase.profleQueries.InsertProfile(newuser.name,newuser.pronouns,newuser.bio,0,LocalDateTime.now().toString())
                         }
                         foundusers.add(newuser)
-                        val intent = Intent(context, MainActivity::class.java).apply {
+
+                        val intent = Intent(appcon, MainActivity::class.java).apply {
                             // These flags ensure that tapping the notification doesn't create duplicate activities
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         }
                         val pendingIntent: PendingIntent = PendingIntent.getActivity(
-                            context,
+                            appcon,
                             0, // Request code
                             intent,
                             // FLAG_IMMUTABLE is required for Android 12 (API 31) and above for security
