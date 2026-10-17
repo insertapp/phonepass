@@ -111,14 +111,14 @@ fun Home(navController: NavController, onAndroidAction: ()-> Unit, sumbitProfile
                 modifier = Modifier.height(30.dp)
             )
 
-            var textState by remember { mutableStateOf("") }
+
             val maxChar = 325
 
             TextField(
-                value = textState,
+                value = savedBio,
                 onValueChange = { newValue ->
-                    if (newValue.length < maxChar) {
-                        textState = newValue //
+                    if (newValue.length <= maxChar) {
+                        savedBio = newValue //
                     }
                 },
                 label = { Text("Bio") }
@@ -133,7 +133,6 @@ fun Home(navController: NavController, onAndroidAction: ()-> Unit, sumbitProfile
             Button(onClick = {
                 savedUser = userState.text.toString()
                 savedPronouns = pronounsState.text.toString()
-                savedBio = bioState.text.toString()
                 tester.setthisPronouns(savedPronouns)
                 tester.setthisName(savedUser)
                 tester.setthisBio(savedBio)
@@ -158,7 +157,7 @@ fun Passing(profdb: ProfileDB){
             var passes = profdb.profleQueries.GetProfiles().executeAsList()
             printpasses = ""
             for (pass in passes){
-                printpasses += pass.full_name + "\n" + pass.pronouns + "\n" + pass.bio + "\n\n"
+                printpasses += pass.full_name + "\n" + pass.pronouns + "\n" + pass.bio + "\n" + "\n"
             }
             delay(3000)
         }
