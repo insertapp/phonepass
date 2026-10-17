@@ -282,7 +282,7 @@ class BluetoothScanner {
                             0, // Request code
                             intent,
                             // FLAG_IMMUTABLE is required for Android 12 (API 31) and above for security
-                            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                            PendingIntent.FLAG_IMMUTABLE
                         )
                         val builder = NotificationCompat.Builder(appcon, "com.strangewokrings.phonepass.newpass")
                             .setSmallIcon(R.drawable.pass_icon)
