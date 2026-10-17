@@ -275,7 +275,7 @@ class BluetoothScanner {
 
                         val intent = Intent(appcon, MainActivity::class.java).apply {
                             // These flags ensure that tapping the notification doesn't create duplicate activities
-                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK
                         }
                         val pendingIntent: PendingIntent = PendingIntent.getActivity(
                             appcon,
