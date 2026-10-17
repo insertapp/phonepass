@@ -1,5 +1,6 @@
 package com.strangeworkings.phonepass
 
+import android.app.PendingIntent
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
@@ -18,6 +19,7 @@ import android.bluetooth.le.ScanFilter
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.content.Context
+import android.content.Intent
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 import android.os.Parcel
@@ -270,10 +272,22 @@ class BluetoothScanner {
                             profiledatabase.profleQueries.InsertProfile(newuser.name,newuser.pronouns,newuser.bio,0,LocalDateTime.now().toString())
                         }
                         foundusers.add(newuser)
+                        val intent = Intent(context, MainActivity::class.java).apply {
+                            // These flags ensure that tapping the notification doesn't create duplicate activities
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        }
+                        val pendingIntent: PendingIntent = PendingIntent.getActivity(
+                            context,
+                            0, // Request code
+                            intent,
+                            // FLAG_IMMUTABLE is required for Android 12 (API 31) and above for security
+                            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                        )
                         val builder = NotificationCompat.Builder(appcon, "com.strangewokrings.phonepass.newpass")
                             .setSmallIcon(R.drawable.pass_icon)
                             .setContentTitle("New Pass!!")
                             .setContentText("${newuser.name} has passed with you!")
+                            .setContentIntent(pendingIntent)
                             .setAutoCancel(true)
                         with(NotificationManagerCompat.from(appcon)) {
                             notify(5555, builder.build())
