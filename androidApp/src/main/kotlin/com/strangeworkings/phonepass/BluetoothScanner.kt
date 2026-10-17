@@ -257,8 +257,7 @@ class BluetoothScanner {
                         inProgress[device?.address!!]?.let { Json.decodeFromString(it) }!!
                     if (!foundusers.contains(newuser)) {
                         if (profiledatabase.profleQueries.GetSpecificProfile(newuser.name).executeAsOneOrNull() != null) {
-                            val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-ddTHH:mm:ss");
-                            val lasttime: LocalDateTime = LocalDateTime.parse(profiledatabase.profleQueries.GetSpecificProfile(newuser.name).executeAsOneOrNull()?.timestamp,formatter)
+                            val lasttime: LocalDateTime = LocalDateTime.parse(profiledatabase.profleQueries.GetSpecificProfile(newuser.name).executeAsOneOrNull()?.timestamp)
                             if (ChronoUnit.HOURS.between(lasttime, LocalDateTime.now()) < 12) {
                                 return
                             } else {
