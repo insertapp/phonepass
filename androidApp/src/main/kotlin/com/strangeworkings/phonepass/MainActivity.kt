@@ -1,6 +1,7 @@
 package com.strangeworkings.phonepass
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -15,6 +16,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             App()
         }
+
+        val tester = Profiles("jane doe", "she/her", bio = "yes")
+        Toast.makeText(this, tester.toString(), Toast.LENGTH_LONG).show()
     }
 }
 
