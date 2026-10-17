@@ -27,12 +27,36 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AppNavigation(onAndroidAction = {
-                Toast.makeText(
-                    this@MainActivity,
-                    "Hello from Android",
-                    Toast.LENGTH_SHORT
-                ).show()
-
+                if (checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(Manifest.permission.BLUETOOTH_ADVERTISE) == PackageManager.PERMISSION_GRANTED
+                    && checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    val bluetoothManager: BluetoothManager =
+                        getSystemService(BluetoothManager::class.java)
+                    val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.adapter
+                    val notificationChannel = NotificationChannel(
+                        "com.strangewokrings.phonepass.newpass",
+                        "Notification for a new pass",
+                        NotificationManager.IMPORTANCE_DEFAULT
+                    )
+                    val notificationManager =
+                        getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                    notificationManager.createNotificationChannel(notificationChannel)
+                    if (bluetoothAdapter?.isEnabled == false) {
+                        val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+                        val REQUEST_ENABLE_BT = 0
+                        startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
+                    }
+                    //val CHANNEL = "com.strangeworkings.phonepass/foreground"
+                    val intent = Intent(this, BackgroundScanner::class.java)
+                    startForegroundService(intent)
+                } else {
+                    Toast.makeText(
+                        this,
+                        "No Permission",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
                 //start scanning
             }, sumbitProfile = {
                 val factory = DriverFactory(this)
@@ -64,25 +88,6 @@ class MainActivity : ComponentActivity() {
         permissions: Array<String>,
         grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.BLUETOOTH_ADVERTISE) == PackageManager.PERMISSION_GRANTED) {
-            val bluetoothManager: BluetoothManager = getSystemService(BluetoothManager::class.java)
-            val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.adapter
-            val notificationChannel = NotificationChannel(
-                "com.strangewokrings.phonepass.newpass",
-                "Notification for a new pass",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(notificationChannel)
-            if (bluetoothAdapter?.isEnabled == false) {
-                val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-                val REQUEST_ENABLE_BT = 0
-                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
-            }
-            //val CHANNEL = "com.strangeworkings.phonepass/foreground"
-            val intent = Intent(this, BackgroundScanner::class.java)
-            startForegroundService(intent)
-        }
 //            val bluetoothManager: BluetoothManager = getSystemService(BluetoothManager::class.java)
 //            val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.adapter
 //            if (bluetoothAdapter?.isEnabled == false) {
