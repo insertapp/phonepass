@@ -20,6 +20,8 @@ import androidx.core.app.ActivityCompat
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        val factory = DriverFactory(this)
+        val profiledatabase = ProfileDB(factory.createDriver())
         val READ_EXTERNAL_STORAGE_PERMISSION_CODE = 101
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
@@ -30,7 +32,13 @@ class MainActivity : ComponentActivity() {
                     "Hello from Android",
                     Toast.LENGTH_SHORT
                 ).show()
-            })
+
+                //start scanning
+            }, sumbitProfile = {
+                val factory = DriverFactory(this)
+                val profiledatabase = ProfileDB(factory.createDriver())
+                profiledatabase.meQueries.UpdateProfile("yes", "no", "maybe")
+            }, profdb = profiledatabase)
         }
         ActivityCompat.requestPermissions(
             this,

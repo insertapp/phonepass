@@ -47,7 +47,7 @@ object Routes{
 
 @Composable
 
-fun AppNavigation(onAndroidAction: () -> Unit) {
+fun AppNavigation(onAndroidAction: () -> Unit, sumbitProfile: () -> Unit, profdb: ProfileDB) {
     val navController = rememberNavController()
 
     // 2. Set up the NavHost with a start destination
@@ -55,7 +55,7 @@ fun AppNavigation(onAndroidAction: () -> Unit) {
 
         // First Page: Home Screen
         composable(Routes.Home) {
-            Home(navController = navController, onAndroidAction)
+            Home(navController = navController, onAndroidAction, sumbitProfile, profdb)
         }
 
         // Second Page: Detail Screen
@@ -66,7 +66,7 @@ fun AppNavigation(onAndroidAction: () -> Unit) {
 }
 
 @Composable
-fun Home(navController: NavController, onAndroidAction: ()-> Unit) {
+fun Home(navController: NavController, onAndroidAction: ()-> Unit, sumbitProfile: ()-> Unit, profdb: ProfileDB) {
         MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
         Column(
@@ -132,6 +132,7 @@ fun Home(navController: NavController, onAndroidAction: ()-> Unit) {
                 tester.setthisName(savedUser)
                 tester.setthisBio(savedBio)
                 testing = tester.toString()
+                profdb.meQueries.UpdateProfile(savedUser,savedPronouns,savedBio)
                 navController.navigate("Passing")
 
             }){
@@ -146,6 +147,7 @@ fun Home(navController: NavController, onAndroidAction: ()-> Unit) {
 fun Passing(){
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
+
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.primaryContainer)
@@ -154,12 +156,7 @@ fun Passing(){
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(100.dp))
-            Button(onClick = {
-
-
-            }) {
-                Text("start passing")
-            }
+            Text("")
         }
     }
 }
