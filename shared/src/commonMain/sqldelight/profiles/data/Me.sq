@@ -6,5 +6,8 @@ CREATE TABLE Me (
 
 INSERT INTO Me (full_name, pronouns, bio) VALUES ('', '', '');
 
+GetProfile:
+SELECT full_name, pronouns, bio FROM Me LIMIT 1;
+
 UpdateProfile:
 UPDATE Me SET full_name = ?, pronouns = ?, bio = ?;

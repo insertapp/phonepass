@@ -29,6 +29,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.delay
 
 import okio.FileSystem
 import okio.Path.Companion.toPath
@@ -83,9 +84,6 @@ fun Home(navController: NavController, onAndroidAction: ()-> Unit, sumbitProfile
             var pronounsState = rememberTextFieldState(initialText = "")
             var bioState = rememberTextFieldState(initialText = "")
 
-            Button(onClick = onAndroidAction) {
-                Text("Run Android action")
-            }
 
             Spacer(
                 modifier = Modifier.height(50.dp)
@@ -134,6 +132,7 @@ fun Home(navController: NavController, onAndroidAction: ()-> Unit, sumbitProfile
                 testing = tester.toString()
                 profdb.meQueries.UpdateProfile(savedUser,savedPronouns,savedBio)
                 navController.navigate("Passing")
+                onAndroidAction()
 
             }){
                 Text("submit")
@@ -145,8 +144,19 @@ fun Home(navController: NavController, onAndroidAction: ()-> Unit, sumbitProfile
 
 @Composable
 fun Passing(profdb: ProfileDB){
+    var printpasses by remember { mutableStateOf("") }
+    LaunchedEffect(profdb) {
+        while (true) {
+            var passes = profdb.profleQueries.GetProfiles().executeAsList()
+            printpasses = ""
+            for (pass in passes){
+                printpasses += pass.full_name + "\n" + pass.pronouns + "\n" + pass.bio + "\n\n"
+            }
+            delay(3000)
+        }
+    }
     MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
+
 
         Column(
             modifier = Modifier
@@ -159,13 +169,8 @@ fun Passing(profdb: ProfileDB){
 
             Text("Here are all your passes!", fontSize = 20.sp)
 
-            var passes = profdb.profleQueries.GetProfiles().executeAsList()
-            var printpasses = ""
-            for (pass in passes){
-                printpasses += pass.full_name + "-" + pass.pronouns + "-" + pass.bio + "\n"
-            }
 
-            Text("$printpasses")
+            Text(printpasses)
 
 
         }

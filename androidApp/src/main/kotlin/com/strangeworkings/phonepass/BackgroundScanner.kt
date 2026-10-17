@@ -34,9 +34,12 @@ class BackgroundScanner: Service() {
         startForeground(6767, notification)
         val bluetoothManager: BluetoothManager = getSystemService(BluetoothManager::class.java)
         val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.adapter
-        val scanner = BluetoothScanner(bluetoothAdapter, this, UserProfile("test","they/them","The quick brown fox"))
-        scanner.advertise()
-        scanner.scan()
+        val factory = DriverFactory(this)
+        val profiledatabase = ProfileDB(factory.createDriver())
+        val me = profiledatabase.meQueries.GetProfile().executeAsOne()
+        val scanner = me.bio?.let { BluetoothScanner(bluetoothAdapter, this, UserProfile(me.full_name,me.pronouns,it)) }
+        scanner?.advertise()
+        scanner?.scan()
         return START_STICKY
     }
 
