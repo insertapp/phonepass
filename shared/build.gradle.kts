@@ -45,6 +45,7 @@ kotlin {
             implementation(libs.compose.uiTooling)
         }
         commonMain.dependencies {
+            implementation("com.squareup.okio:okio:3.18.2")
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
@@ -53,6 +54,9 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation ("androidx.navigation:navigation-fragment-ktx:2.10.2")
+            implementation( "androidx.navigation:navigation-ui-ktx:2.10.2")
+            implementation("org.jetbrains.androidx.navigation:navigation-compose:2.10.0-rc01")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
