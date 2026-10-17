@@ -111,9 +111,17 @@ fun Home(navController: NavController, onAndroidAction: ()-> Unit, sumbitProfile
                 modifier = Modifier.height(30.dp)
             )
 
+            var textState by remember { mutableStateOf("") }
+            val maxChar = 325
+
             TextField(
-                state = bioState,
-                label = {Text("bio")}
+                value = textState,
+                onValueChange = { newValue ->
+                    if (newValue.length <= maxChar) {
+                        textState = newValue //
+                    }
+                },
+                label = { Text("Bio") }
             )
             Text("User: $savedUser")
             Text("Pronouns: $savedPronouns")
