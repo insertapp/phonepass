@@ -24,7 +24,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
-            AppNavigation()
+            AppNavigation(onAndroidAction = {
+                Toast.makeText(
+                    this@MainActivity,
+                    "Hello from Android",
+                    Toast.LENGTH_SHORT
+                ).show()
+            })
         }
         ActivityCompat.requestPermissions(
             this,
@@ -84,8 +90,14 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview
-@Composable
-fun AppAndroidPreview() {
-    AppNavigation()
-}
+//@Preview
+//@Composable
+//fun AppAndroidPreview() {
+//    AppNavigation(onAndroidAction = {
+//        Toast.makeText(
+//            this,
+//            "Hello from Android",
+//            Toast.LENGTH_SHORT
+//        ).show()
+//    }))
+//}

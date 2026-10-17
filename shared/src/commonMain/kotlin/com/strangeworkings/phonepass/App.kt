@@ -46,8 +46,8 @@ object Routes{
 }
 
 @Composable
-@Preview
-fun AppNavigation() {
+
+fun AppNavigation(onAndroidAction: () -> Unit) {
     val navController = rememberNavController()
 
     // 2. Set up the NavHost with a start destination
@@ -55,7 +55,7 @@ fun AppNavigation() {
 
         // First Page: Home Screen
         composable(Routes.Home) {
-            Home(navController = navController)
+            Home(navController = navController, onAndroidAction)
         }
 
         // Second Page: Detail Screen
@@ -66,7 +66,7 @@ fun AppNavigation() {
 }
 
 @Composable
-fun Home(navController: NavController) {
+fun Home(navController: NavController, onAndroidAction: ()-> Unit) {
         MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
         Column(
@@ -82,6 +82,10 @@ fun Home(navController: NavController) {
             var userState = rememberTextFieldState(initialText = "")
             var pronounsState = rememberTextFieldState(initialText = "")
             var bioState = rememberTextFieldState(initialText = "")
+
+            Button(onClick = onAndroidAction) {
+                Text("Run Android action")
+            }
 
             Spacer(
                 modifier = Modifier.height(50.dp)

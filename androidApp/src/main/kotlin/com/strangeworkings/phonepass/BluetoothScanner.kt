@@ -111,8 +111,6 @@ class BluetoothScanner {
         profile = Json.encodeToString(OtherUserProfile(pf.name,pf.pronouns,pf.bio,0, LocalDateTime.now()))
         val factory = DriverFactory(appcon)
         profiledatabase = ProfileDB(factory.createDriver())
-        Log.i("test",profiledatabase.profleQueries.GetProfiles().executeAsList().toString())
-        Log.i("test",profiledatabase.profleQueries.GetProfiles().executeAsList().toString())
     }
 
 
