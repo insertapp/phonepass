@@ -9,3 +9,12 @@ CREATE TABLE Profiles (
 InsertProfile:
 INSERT INTO Profiles(full_name, pronouns,bio,times_seen, timestamp)
 VALUES (?,?,?,?,?);
+
+GetProfiles:
+SELECT full_name, pronouns,bio,times_seen, timestamp FROM Profiles;
+
+GetSpecificProfile:
+SELECT full_name, pronouns,bio,times_seen, timestamp FROM Profiles WHERE full_name = ?;
+
+UpdateSpecificProfile:
+UPDATE Profiles SET full_name = ?, pronouns = ?, bio = ?, times_seen = ?, timestamp = ? WHERE full_name = ?;

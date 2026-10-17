@@ -33,7 +33,10 @@ import java.nio.charset.Charset
 import kotlin.with
 import androidx.core.util.size
 import java.nio.file.Files.writeString
+import java.sql.Driver
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.Dictionary
 
 
@@ -100,10 +103,16 @@ class BluetoothScanner {
     private val appcon: Context
     private val profile: String
 
+    private val profiledatabase: ProfileDB
+
     constructor(adapter: BluetoothAdapter?, ctx: Context, pf: UserProfile) {
         bladapter = adapter
         appcon = ctx
         profile = Json.encodeToString(OtherUserProfile(pf.name,pf.pronouns,pf.bio,0, LocalDateTime.now()))
+        val factory = DriverFactory(appcon)
+        profiledatabase = ProfileDB(factory.createDriver())
+        Log.i("test",profiledatabase.profleQueries.GetProfiles().executeAsList().toString())
+        Log.i("test",profiledatabase.profleQueries.GetProfiles().executeAsList().toString())
     }
 
 
@@ -247,6 +256,22 @@ class BluetoothScanner {
                     val newuser: OtherUserProfile =
                         inProgress[device?.address!!]?.let { Json.decodeFromString(it) }!!
                     if (!foundusers.contains(newuser)) {
+                        if (profiledatabase.profleQueries.GetSpecificProfile(newuser.name).executeAsOneOrNull() != null) {
+                            val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-ddTHH:mm:ss");
+                            val lasttime: LocalDateTime = LocalDateTime.parse(profiledatabase.profleQueries.GetSpecificProfile(newuser.name).executeAsOneOrNull()?.timestamp,formatter)
+                            if (ChronoUnit.HOURS.between(lasttime, LocalDateTime.now()) < 12) {
+                                return
+                            } else {
+                                val seen = profiledatabase.profleQueries.GetSpecificProfile(newuser.name).executeAsOneOrNull()?.times_seen
+                                val newseen = seen?.toInt()
+                                profiledatabase.profleQueries.UpdateSpecificProfile(newuser.name,newuser.pronouns,newuser.bio,
+                                    (newseen?.plus(
+                                        1
+                                    ))?.toLong(),LocalDateTime.now().toString(),newuser.name)
+                            }
+                        } else {
+                            profiledatabase.profleQueries.InsertProfile(newuser.name,newuser.pronouns,newuser.bio,0,LocalDateTime.now().toString())
+                        }
                         foundusers.add(newuser)
                         val builder = NotificationCompat.Builder(appcon, "com.strangewokrings.phonepass.newpass")
                             .setSmallIcon(R.drawable.pass_icon)
