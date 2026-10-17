@@ -117,7 +117,7 @@ fun Home(navController: NavController, onAndroidAction: ()-> Unit, sumbitProfile
             TextField(
                 value = textState,
                 onValueChange = { newValue ->
-                    if (newValue.length <= maxChar) {
+                    if (newValue.length < maxChar) {
                         textState = newValue //
                     }
                 },
