@@ -46,7 +46,7 @@ fun App() {
                     Text("Test: $greeting")
                 }
             }
-            var textState = rememberTextFieldState(initialText = "")
+            val textState = rememberTextFieldState(initialText = "")
             TextField(
                 state = textState,
                 label = {Text("ieating")}
