@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -45,6 +46,7 @@ import org.jetbrains.compose.resources.painterResource
 
 import phonepass.shared.generated.resources.Res
 import phonepass.shared.generated.resources.compose_multiplatform
+import sh.calvin.autolinktext.rememberAutoLinkText
 
 
 object Routes{
@@ -190,14 +192,15 @@ fun Passing(profdb: ProfileDB){
                             defaultElevation = 6.dp
                         ),
                         modifier = Modifier
-                            .size(width = 300.dp, height = 100.dp)
+                            .size(width = 300.dp, height = 150.dp)
                     ) {
                         Text(
-                            text = "Name: ${printpasses.full_name}\nPronouns: ${printpasses.pronouns}\nBio: ${printpasses.bio!!}",
+                            text = AnnotatedString.rememberAutoLinkText("Name: ${printpasses.full_name}\nPronouns: ${printpasses.pronouns}\nBio: ${printpasses.bio!!}"),
                             modifier = Modifier
                                 .padding(16.dp),
                             textAlign = TextAlign.Left,
                         )
+
                     }
                     Spacer(modifier = Modifier.height(25.dp))
 

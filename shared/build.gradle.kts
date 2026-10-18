@@ -76,6 +76,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.autolinktext)
 
 
         }
