@@ -59,9 +59,8 @@ class MainActivity : ComponentActivity() {
                 }
                 //start scanning
             }, sumbitProfile = {
-                val factory = DriverFactory(this)
-                val profiledatabase = ProfileDB(factory.createDriver())
-                profiledatabase.meQueries.UpdateProfile("yes", "no", "maybe")
+                val intent = Intent(this, BackgroundScanner::class.java)
+                stopService(intent)
             }, profdb = profiledatabase)
         }
         ActivityCompat.requestPermissions(

@@ -10,9 +10,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Button
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -77,12 +83,14 @@ fun Home(navController: NavController, onAndroidAction: ()-> Unit, sumbitProfile
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            var savedUser by remember { mutableStateOf("") }
-            var savedPronouns by remember { mutableStateOf("") }
-            var savedBio by remember { mutableStateOf("") }
-            var userState = rememberTextFieldState(initialText = "")
-            var pronounsState = rememberTextFieldState(initialText = "")
-            var bioState = rememberTextFieldState(initialText = "")
+            var user = profdb.meQueries.GetProfile().executeAsOne()
+            var savedUser by remember { mutableStateOf(user.full_name) }
+            var savedPronouns by remember { mutableStateOf(user.pronouns) }
+            var savedBio by remember { mutableStateOf(user.bio!!) }
+            var userState = rememberTextFieldState(initialText = user.full_name)
+            var pronounsState = rememberTextFieldState(initialText = user.pronouns)
+            var bioState = rememberTextFieldState(initialText = user.bio!!)
+
 
 
             Spacer(
@@ -123,12 +131,7 @@ fun Home(navController: NavController, onAndroidAction: ()-> Unit, sumbitProfile
                 },
                 label = { Text("Bio") }
             )
-            Text("User: $savedUser")
-            Text("Pronouns: $savedPronouns")
-            Text("Bio: $savedBio")
-            var tester = UserProfile(savedUser, savedPronouns, savedBio)
-            var testing = tester.toString()
-            Text("profile: $testing")
+            val tester = UserProfile(savedUser, savedPronouns, savedBio)
             Spacer(Modifier.weight(1f))
             Button(onClick = {
                 savedUser = userState.text.toString()
@@ -136,13 +139,12 @@ fun Home(navController: NavController, onAndroidAction: ()-> Unit, sumbitProfile
                 tester.setthisPronouns(savedPronouns)
                 tester.setthisName(savedUser)
                 tester.setthisBio(savedBio)
-                testing = tester.toString()
                 profdb.meQueries.UpdateProfile(savedUser,savedPronouns,savedBio)
                 navController.navigate("Passing")
                 onAndroidAction()
 
             }){
-                Text("submit")
+                Text("Save & View Passes")
             }
             Spacer(Modifier.height(50.dp))
         }
@@ -151,14 +153,10 @@ fun Home(navController: NavController, onAndroidAction: ()-> Unit, sumbitProfile
 
 @Composable
 fun Passing(profdb: ProfileDB){
-    var printpasses by remember { mutableStateOf("") }
+    var printpasses by remember { mutableStateOf(emptyList<profiles.data.Profiles>()) }
     LaunchedEffect(profdb) {
         while (true) {
-            var passes = profdb.profleQueries.GetProfiles().executeAsList()
-            printpasses = ""
-            for (pass in passes){
-                printpasses += pass.full_name + "\n" + pass.pronouns + "\n" + pass.bio + "\n" + "\n"
-            }
+            printpasses = profdb.profleQueries.GetProfiles().executeAsList()
             delay(3000)
         }
     }
@@ -176,10 +174,36 @@ fun Passing(profdb: ProfileDB){
 
             Text("Here are all your passes!", fontSize = 20.sp)
 
+            Spacer(modifier = Modifier.height(50.dp))
 
-            Text(printpasses)
+            LazyColumn(
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .safeContentPadding()
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
 
+                items(printpasses) { printpasses ->
+                    ElevatedCard(
+                        elevation = CardDefaults.cardElevation(
+                            defaultElevation = 6.dp
+                        ),
+                        modifier = Modifier
+                            .size(width = 300.dp, height = 100.dp)
+                    ) {
+                        Text(
+                            text = "Name: ${printpasses.full_name}\nPronouns: ${printpasses.pronouns}\nBio: ${printpasses.bio!!}",
+                            modifier = Modifier
+                                .padding(16.dp),
+                            textAlign = TextAlign.Left,
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(25.dp))
 
+                }
+
+            }
         }
     }
 }
