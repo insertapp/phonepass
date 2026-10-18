@@ -1,11 +1,13 @@
 package com.strangeworkings.phonepass
 
 import android.Manifest
+import android.app.ActivityManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
+import android.content.Context.ACTIVITY_SERVICE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -49,6 +51,9 @@ class MainActivity : ComponentActivity() {
                     }
                     //val CHANNEL = "com.strangeworkings.phonepass/foreground"
                     val intent = Intent(this, BackgroundScanner::class.java)
+                    if (this.isServiceRunning(BackgroundScanner::class.java)) {
+                        stopService(intent)
+                    }
                     startForegroundService(intent)
                 } else {
                     Toast.makeText(
@@ -113,3 +118,9 @@ class MainActivity : ComponentActivity() {
 //        ).show()
 //    }))
 //}
+
+fun <T> Context.isServiceRunning(service: Class<T>): Boolean {
+    return (getSystemService(ACTIVITY_SERVICE) as ActivityManager)
+        .getRunningServices(Integer.MAX_VALUE)
+        .any { it -> it.service.className == service.name }
+}
