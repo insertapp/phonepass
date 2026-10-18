@@ -56,11 +56,11 @@ object Routes{
 
 @Composable
 
-fun AppNavigation(onAndroidAction: () -> Unit, sumbitProfile: () -> Unit, profdb: ProfileDB) {
+fun AppNavigation(onAndroidAction: () -> Unit, sumbitProfile: () -> Unit, profdb: ProfileDB, start: String = "Home") {
     val navController = rememberNavController()
 
     // 2. Set up the NavHost with a start destination
-    NavHost(navController = navController, startDestination = Routes.Home) {
+    NavHost(navController = navController, startDestination = start) {
 
         // First Page: Home Screen
         composable(Routes.Home) {
