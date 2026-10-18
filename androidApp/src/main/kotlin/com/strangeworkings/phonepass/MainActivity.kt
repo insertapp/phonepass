@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
                     val notificationChannel = NotificationChannel(
                         "com.strangewokrings.phonepass.newpass",
                         "Notification for a new pass",
-                        NotificationManager.IMPORTANCE_DEFAULT
+                        NotificationManager.IMPORTANCE_HIGH
                     )
                     val notificationManager =
                         getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

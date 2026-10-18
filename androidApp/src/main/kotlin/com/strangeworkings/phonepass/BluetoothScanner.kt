@@ -289,6 +289,7 @@ class BluetoothScanner {
                             .setContentTitle("New Pass!!")
                             .setContentText("${newuser.name} has passed with you!")
                             .setContentIntent(pendingIntent)
+                            .setPriority(NotificationCompat.PRIORITY_HIGH)
                             .setAutoCancel(true)
                         with(NotificationManagerCompat.from(appcon)) {
                             notify(5555, builder.build())
